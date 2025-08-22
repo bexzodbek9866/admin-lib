@@ -3,6 +3,7 @@
     <div class="row q-gutter-md">
       <div class="col-12">
         <h3 class="q-mb-md">Admin Boshqaruv Paneli</h3>
+        <p class="text-caption q-mb-md">Bugungi sana: {{ currentDate }}</p>
         
         <!-- Notifications -->
         <div v-if="hasNotifications" class="q-mb-md">
@@ -188,11 +189,21 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAdminStore } from '../stores'
 
 const adminStore = useAdminStore()
+
+// Computed properties
+const currentDate = computed(() => {
+  return new Date().toLocaleDateString('uz-UZ', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+})
 
 // Reactive properties
 const { 

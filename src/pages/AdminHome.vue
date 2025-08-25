@@ -3,7 +3,7 @@
     <div class="row q-gutter-md">
       <div class="col-12">
         <h3 class="q-mb-md">Admin Boshqaruv Paneli</h3>
-        <p class="text-caption q-mb-md">Bugungi sana: {{ currentDate }}</p>
+        <p class="text-caption q-mb-md">Bugungi sana: {{ formatDate(new Date(), 'long') }}</p>
         
         <!-- Notifications -->
         <div v-if="hasNotifications" class="q-mb-md">
@@ -25,66 +25,61 @@
         </div>
       </div>
 
-      <!-- Statistics Cards -->
+      <!-- Statistics Cards - Shared Card komponentidan foydalanish -->
       <div class="col-12">
         <div class="row q-gutter-md">
           <div class="col-md-3 col-sm-6 col-12">
-            <q-card class="bg-primary text-white">
-              <q-card-section>
-                <div class="text-h6">Jami Foydalanuvchilar</div>
-                <div class="text-h3">{{ stats.totalUsers }}</div>
-              </q-card-section>
-            </q-card>
+            <SharedCard variant="elevated" padding="medium">
+              <div class="text-h6 text-primary">Jami Foydalanuvchilar</div>
+              <div class="text-h3 text-primary">{{ stats.totalUsers }}</div>
+            </SharedCard>
           </div>
           
           <div class="col-md-3 col-sm-6 col-12">
-            <q-card class="bg-positive text-white">
-              <q-card-section>
-                <div class="text-h6">Faol Foydalanuvchilar</div>
-                <div class="text-h3">{{ stats.activeUsers }}</div>
-              </q-card-section>
-            </q-card>
+            <SharedCard variant="elevated" padding="medium">
+              <div class="text-h6 text-positive">Faol Foydalanuvchilar</div>
+              <div class="text-h3 text-positive">{{ stats.activeUsers }}</div>
+            </SharedCard>
           </div>
           
           <div class="col-md-3 col-sm-6 col-12">
-            <q-card class="bg-info text-white">
-              <q-card-section>
-                <div class="text-h6">Jami Buyurtmalar</div>
-                <div class="text-h3">{{ stats.totalOrders }}</div>
-              </q-card-section>
-            </q-card>
+            <SharedCard variant="elevated" padding="medium">
+              <div class="text-h6 text-info">Jami Buyurtmalar</div>
+              <div class="text-h3 text-info">{{ stats.totalOrders }}</div>
+            </SharedCard>
           </div>
           
           <div class="col-md-3 col-sm-6 col-12">
-            <q-card class="bg-orange text-white">
-              <q-card-section>
-                <div class="text-h6">Daromad</div>
-                <div class="text-h3">${{ stats.revenue.toLocaleString() }}</div>
-              </q-card-section>
-            </q-card>
+            <SharedCard variant="elevated" padding="medium">
+              <div class="text-h6 text-orange">Daromad</div>
+              <div class="text-h3 text-orange">{{ formatCurrency(stats.revenue) }}</div>
+            </SharedCard>
           </div>
         </div>
       </div>
 
-      <!-- Control Buttons -->
+      <!-- Control Buttons - Shared Button komponentidan foydalanish -->
       <div class="col-12">
         <div class="q-gutter-sm">
-          <q-btn 
-            color="primary" 
+          <SharedButton 
             label="Statistikalarni yangilash"
+            variant="primary"
+            icon="refresh"
+            :loading="loading"
             @click="fetchStats"
-            :loading="loading"
           />
-          <q-btn 
-            color="secondary" 
+          <SharedButton 
             label="Foydalanuvchilarni yuklash"
-            @click="fetchAdminUsers"
+            variant="secondary"
+            icon="group"
             :loading="loading"
+            @click="fetchAdminUsers"
           />
-          <q-btn 
+          <SharedButton 
             v-if="hasNotifications"
-            color="negative" 
             label="Bildirishnomalarni tozalash"
+            variant="danger"
+            icon="clear_all"
             @click="clearAllNotifications"
           />
         </div>
@@ -192,6 +187,7 @@
 import { onMounted, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAdminStore } from '../stores'
+import { SharedButton, SharedCard, formatCurrency, formatDate } from '@monorepo/shared'
 
 const adminStore = useAdminStore()
 

@@ -78,7 +78,7 @@
               class="full-width"
               color="primary"
               label="Foydalanuvchilarni Ko'rish"
-              @click="$router.push('/admin/users')"
+              @click="router.push('/admin/users')"
             />
           </template>
           <div class="action-content">
@@ -96,7 +96,7 @@
               class="full-width"
               color="secondary"
               label="Sozlamalarni Ochish"
-              @click="$router.push('/admin/settings')"
+              @click="router.push('/admin/settings')"
             />
           </template>
           <div class="action-content">
@@ -131,7 +131,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { BaseCard, BaseButton } from '@apps/shared'
 import { useRouter } from 'vue-router'
 

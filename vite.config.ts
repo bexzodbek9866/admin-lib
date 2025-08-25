@@ -14,11 +14,6 @@ export default defineConfig(() => ({
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
     }),
   ],
-  resolve: {
-    alias: {
-      '@monorepo/shared': path.resolve(__dirname, '../shared/src/index.ts'),
-    },
-  },
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],
@@ -43,7 +38,7 @@ export default defineConfig(() => ({
     },
     rollupOptions: {
       // External packages that should not be bundled into your library.
-      external: ['vue', 'quasar', '@monorepo/shared'],
+      external: ['vue'],
     },
   },
   test: {

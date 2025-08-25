@@ -40,5 +40,9 @@
     "src/**/*.tsx",
     "src/**/*.vue"
   ],
-  "references": []
+  "references": [
+    {
+      "path": "../shared/tsconfig.lib.json"
+    }
+  ]
 }

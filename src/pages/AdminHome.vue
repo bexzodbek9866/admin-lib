@@ -6,41 +6,51 @@
     </div>
 
     <div class="dashboard-cards">
-      <div class="card">
-        <h3>Umumiy Foydalanuvchilar</h3>
+      <BaseCard
+        title="Umumiy Foydalanuvchilar"
+        subtitle="Ro'yxatdan o'tgan foydalanuvchilar"
+        class="stats-card"
+      >
         <div class="card-number">
           {{ stats.totalUsers }}
         </div>
-        <p>Ro'yxatdan o'tgan foydalanuvchilar</p>
-      </div>
+      </BaseCard>
       
-      <div class="card">
-        <h3>Faol Sessiyalar</h3>
+      <BaseCard
+        title="Faol Sessiyalar"
+        subtitle="Hozirda faol sessiyalar"
+        class="stats-card"
+      >
         <div class="card-number">
           {{ stats.activeSessions }}
         </div>
-        <p>Hozirda faol sessiyalar</p>
-      </div>
+      </BaseCard>
       
-      <div class="card">
-        <h3>Jami Buyurtmalar</h3>
+      <BaseCard
+        title="Jami Buyurtmalar"
+        subtitle="Barcha buyurtmalar soni"
+        class="stats-card"
+      >
         <div class="card-number">
           {{ stats.totalOrders }}
         </div>
-        <p>Barcha buyurtmalar soni</p>
-      </div>
+      </BaseCard>
       
-      <div class="card">
-        <h3>Daromad</h3>
+      <BaseCard
+        title="Daromad"
+        subtitle="Jami daromad miqdori"
+        class="stats-card"
+      >
         <div class="card-number">
           ${{ stats.totalRevenue }}
         </div>
-        <p>Jami daromad miqdori</p>
-      </div>
+      </BaseCard>
     </div>
 
-    <div class="recent-activity">
-      <h2>So'nggi Tizim Faoliyati</h2>
+    <BaseCard
+      title="So'nggi Tizim Faoliyati"
+      class="recent-activity-card"
+    >
       <div class="activity-list">
         <div
           v-for="activity in recentActivities"
@@ -57,55 +67,98 @@
           </div>
         </div>
       </div>
-    </div>
+    </BaseCard>
 
     <div class="quick-actions">
       <h2>Tezkor Boshqaruv</h2>
       <div class="actions-grid">
-        <router-link
-          to="/admin/users"
-          class="action-card"
-        >
-          <div class="action-icon">
-            👥
+        <BaseCard class="action-card-wrapper">
+          <template #actions>
+            <BaseButton
+              class="full-width"
+              color="primary"
+              label="Foydalanuvchilarni Ko'rish"
+              @click="$router.push('/admin/users')"
+            />
+          </template>
+          <div class="action-content">
+            <div class="action-icon">
+              👥
+            </div>
+            <h3>Foydalanuvchilar</h3>
+            <p>Foydalanuvchilarni boshqarish</p>
           </div>
-          <h3>Foydalanuvchilar</h3>
-          <p>Foydalanuvchilarni boshqarish</p>
-        </router-link>
+        </BaseCard>
         
-        <router-link
-          to="/admin/settings"
-          class="action-card"
-        >
-          <div class="action-icon">
-            ⚙️
+        <BaseCard class="action-card-wrapper">
+          <template #actions>
+            <BaseButton
+              class="full-width"
+              color="secondary"
+              label="Sozlamalarni Ochish"
+              @click="$router.push('/admin/settings')"
+            />
+          </template>
+          <div class="action-content">
+            <div class="action-icon">
+              ⚙️
+            </div>
+            <h3>Sozlamalar</h3>
+            <p>Tizim sozlamalarini o'zgartirish</p>
           </div>
-          <h3>Sozlamalar</h3>
-          <p>Tizim sozlamalarini o'zgartirish</p>
-        </router-link>
+        </BaseCard>
         
-        <div class="action-card">
-          <div class="action-icon">
-            📊
+        <BaseCard class="action-card-wrapper">
+          <template #actions>
+            <BaseButton
+              class="full-width"
+              color="accent"
+              label="Hisobotlarni Ko'rish"
+              @click="showReports"
+            />
+          </template>
+          <div class="action-content">
+            <div class="action-icon">
+              📊
+            </div>
+            <h3>Hisobotlar</h3>
+            <p>Statistika va hisobotlar</p>
           </div>
-          <h3>Hisobotlar</h3>
-          <p>Statistika va hisobotlar</p>
-        </div>
+        </BaseCard>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useAdminStore } from '../stores'
+import { onMounted, ref } from 'vue'
+import { BaseCard, BaseButton } from '@apps/shared'
+import { useRouter } from 'vue-router'
 
-const adminStore = useAdminStore()
+const router = useRouter()
 
-onMounted(() => {
-  adminStore.fetchStats()
-  adminStore.fetchRecentActivities()
+// Mock data for demonstration
+const stats = ref({
+  totalUsers: 1250,
+  activeSessions: 89,
+  totalOrders: 3456,
+  totalRevenue: 125000
 })
+
+const recentActivities = ref([
+  {
+    id: 1,
+    title: 'Yangi foydalanuvchi qo\'shildi',
+    description: 'Ahmad Karimov tizimga ro\'yxatdan o\'tdi',
+    date: new Date()
+  },
+  {
+    id: 2,
+    title: 'Buyurtma yaratildi',
+    description: 'Yangi buyurtma #1234 yaratildi',
+    date: new Date()
+  }
+])
 
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('uz-UZ', {
@@ -117,8 +170,9 @@ const formatDate = (date: Date) => {
   }).format(date)
 }
 
-// Store dan kerakli ma'lumotlarni olish
-const { stats, recentActivities } = adminStore
+const showReports = () => {
+  alert('Hisobotlar sahifasi hali tayyorlanmoqda!')
+}
 </script>
 
 <style scoped>
@@ -152,51 +206,25 @@ const { stats, recentActivities } = adminStore
   margin-bottom: 3rem;
 }
 
-.card {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.stats-card {
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.card:hover {
+.stats-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.card h3 {
-  color: #374151;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
 }
 
 .card-number {
   font-size: 2.5rem;
   font-weight: 700;
   color: #dc2626;
-  margin-bottom: 0.5rem;
+  margin: 1rem 0;
 }
 
-.card p {
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-
-.recent-activity {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.recent-activity-card {
   margin-bottom: 3rem;
-}
-
-.recent-activity h2 {
-  color: #1f2937;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid #f3f4f6;
-  padding-bottom: 0.5rem;
 }
 
 .activity-list {
@@ -260,20 +288,18 @@ const { stats, recentActivities } = adminStore
   gap: 1.5rem;
 }
 
-.action-card {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  color: white;
-  padding: 2rem;
-  border-radius: 12px;
-  text-decoration: none;
-  text-align: center;
+.action-card-wrapper {
   transition: transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
 }
 
-.action-card:hover {
+.action-card-wrapper:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.action-content {
+  text-align: center;
+  padding: 1rem 0;
 }
 
 .action-icon {
@@ -281,13 +307,18 @@ const { stats, recentActivities } = adminStore
   margin-bottom: 1rem;
 }
 
-.action-card h3 {
+.action-content h3 {
   margin-bottom: 0.5rem;
   font-size: 1.3rem;
+  color: #1f2937;
 }
 
-.action-card p {
-  opacity: 0.9;
+.action-content p {
+  color: #6b7280;
   font-size: 0.9rem;
+}
+
+.full-width {
+  width: 100%;
 }
 </style>
